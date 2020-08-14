@@ -1,0 +1,38 @@
+---
+
+      
+          
+      - name: RPM install logstash
+        become: yes
+        yum:
+          name:  /home/projadmin/usr/share/Ansible/Kibana/logstash-7.8.0.rpm
+          state: present
+          register: showoutput
+        tags:
+          -install
+      
+      - name: Start logstash
+        become: yes
+        service:
+          name: logstash
+          state: started
+        tags: 
+          -install
+
+      - name: Stop logstash Service
+        become: yes
+        register: showoutput
+        service:
+          name: logstash
+          state: stopped
+        tags: 
+          -erase
+          
+      - name: RPM erase logstash
+        become: yes
+        shell: rpm -e logstash
+        tags: 
+         -erase
+        
+      - name: show list
+        debug: var=showoutput
